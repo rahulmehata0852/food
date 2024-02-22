@@ -17,6 +17,7 @@ app.use(cors({
 }))
 
 app.use("/api/auth", require("./routes/authRoute"))
+app.use("/api/dish", require("./routes/dishRoute"))
 
 
 app.use("*", (req, res) => {
