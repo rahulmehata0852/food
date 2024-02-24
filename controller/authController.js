@@ -39,7 +39,7 @@ exports.registerUser = asyncHandler(async (req, res) => {
 
 exports.loginUser = asyncHandler(async (req, res) => {
 
-    const { email, password } = req.body
+    const { email, password, role } = req.body
     if (validator.isEmpty(email), validator.isEmpty(password)) {
         return res.status(400).json({ message: "All field are required" })
     }
@@ -51,18 +51,20 @@ exports.loginUser = asyncHandler(async (req, res) => {
     }
 
     const result = await Auth.findOne({ email })
+    console.log(result);
     if (!result) {
         return res.status(400).json({ message: "Email not found" })
     }
-    if (result.role === "admin") {
+    if (result.role === 'admin' && role === "admin") {
         const comparePass = await bcrypt.compare(password, result.password)
         if (!comparePass) {
             return res.status(400).json({ message: "Oh owner, Wrong password" })
         }
         const token = jwt.sign({ id: result._id }, process.env.JWT_KEY, { expiresIn: "7d" })
         res.cookie("admin", token)
-        res.status(201).json({ message: "Admin Login Success", result: { name: result.name, email: result.email, _id: result._id, user: result.user } })
+        return res.status(201).json({ message: "Admin Login Success", result: { name: result.name, email: result.email, _id: result._id, user: result.user, role: "admin" } })
     }
+
 
     const comparePass = await bcrypt.compare(password, result.password)
     if (!comparePass) {
@@ -70,11 +72,13 @@ exports.loginUser = asyncHandler(async (req, res) => {
     }
     const token = jwt.sign({ id: result._id }, process.env.JWT_KEY, { expiresIn: "7d" })
     res.cookie("user", token)
-    res.status(201).json({ message: "Login Success", result: { name: result.name, email: result.email, _id: result._id, user: result.user } })
+    res.status(201).json({ message: "Login Success", result: { name: result.name, email: result.email, _id: result._id, user: result.user, role: "user" } })
 })
 
 
 exports.logOut = asyncHandler(async (req, res) => {
+
     res.clearCookie("user")
+    res.clearCookie("admin")
     res.status(200).json({ message: "Log Out success" })
 })

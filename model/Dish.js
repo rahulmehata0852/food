@@ -18,13 +18,10 @@ const dishSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    hero: {
-        type: String,
-        required: true
-    },
     class: {
         type: String,
-        default: "veg"
+        default: "veg",
+        enum: ["veg", "non-veg"]
     }
 
 })

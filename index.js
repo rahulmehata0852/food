@@ -9,6 +9,7 @@ mongoose.connect(process.env.MONGO)
 
 const app = express()
 app.use(express.static("users"))
+app.use(express.static("dishes"))
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({

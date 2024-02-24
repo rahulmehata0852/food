@@ -22,7 +22,7 @@ exports.addDishe = asyncHandler(async (req, res) => {
         }
         console.log(req.body.desc);
         const imgName = req.file.filename
-        await Dish.create({ name: req.body.name, desc: req.body.desc, price: req.body.price, hero: imgName })
+        await Dish.create({ name: req.body.name, desc: req.body.desc, price: req.body.price, hero: imgName, class: req.body.class })
         res.status(201).json({ message: "dish add success" })
     })
 })
