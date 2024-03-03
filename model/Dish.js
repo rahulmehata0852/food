@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 
 
 const dishSchema = new mongoose.Schema({
+
     name: {
         type: String,
         required: true
@@ -23,7 +24,6 @@ const dishSchema = new mongoose.Schema({
         default: "veg",
         enum: ["veg", "non-veg"]
     }
-
 })
 
 
