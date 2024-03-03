@@ -1,0 +1,28 @@
+const { getProduct, addCart, getUserCart, updateUserCart, addUserAddress, getUserAddress, placeOrderDish, getUserOrder, initiatePayment, payMoney, getUserOrderStatus } = require("../controller/userController")
+
+const router = require("express").Router()
+
+
+router
+    .get("/dish/:productId", getProduct)
+    .post("/add-cart", addCart)
+    .get("/cart/:cartId", getUserCart)
+    .put("/update-cart/:cartId", updateUserCart)
+
+    // address
+    .post("/add-address", addUserAddress)
+    .get("/address", getUserAddress)
+
+    // orders
+
+    .post("/place-order", placeOrderDish)
+    .get("/user-order", getUserOrder)
+    .get("/user-order-status/:orderId", getUserOrderStatus)
+
+
+    // payment
+    .post("/initiatePayment", initiatePayment)
+    .post("/pay-money", payMoney)
+
+
+module.exports = router

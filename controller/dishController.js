@@ -1,8 +1,9 @@
 const asyncHandler = require("express-async-handler")
-const Dish = require("../model/Dish")
+// const Dish = require("../model/Dish")
 const fs = require("fs/promises")
 const path = require("path")
 const dishUpload = require("../utils/dishUpload")
+const { Dish } = require("../model/Dish")
 
 
 exports.getAllDishes = asyncHandler(async (req, res) => {

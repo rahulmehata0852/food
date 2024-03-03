@@ -12,8 +12,7 @@ const authSchema = new mongoose.Schema({
         required: true
     },
     password: {
-        type: String,
-        required: true
+        type: String
     },
     user: {
         type: String,
@@ -22,6 +21,10 @@ const authSchema = new mongoose.Schema({
     role: {
         type: String,
         default: "user"
+    },
+    active: {
+        type: Boolean,
+        default: true
     }
 },
     {

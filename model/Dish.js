@@ -27,4 +27,4 @@ const dishSchema = new mongoose.Schema({
 })
 
 
-module.exports = mongoose.model("dishes", dishSchema)
+module.exports = { Dish: mongoose.model("dishes", dishSchema), dishSchema }

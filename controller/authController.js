@@ -3,6 +3,7 @@ const validator = require("validator")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const Auth = require("../model/Auth")
+const { OAuth2Client } = require("google-auth-library")
 const profileUpload = require("../utils/profileUpload")
 
 exports.registerUser = asyncHandler(async (req, res) => {
@@ -61,7 +62,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
             return res.status(400).json({ message: "Oh owner, Wrong password" })
         }
         const token = jwt.sign({ id: result._id }, process.env.JWT_KEY, { expiresIn: "7d" })
-        res.cookie("admin", token)
+        res.cookie("admin", token, { maxAge: 1000 * 60 * 60 * 24 })
         return res.status(201).json({ message: "Admin Login Success", result: { name: result.name, email: result.email, _id: result._id, user: result.user, role: "admin" } })
     }
 
@@ -71,9 +72,12 @@ exports.loginUser = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "Wrong password" })
     }
     const token = jwt.sign({ id: result._id }, process.env.JWT_KEY, { expiresIn: "7d" })
-    res.cookie("user", token)
+    res.cookie("user", token, { maxAge: 1000 * 60 * 60 * 2 })
     res.status(201).json({ message: "Login Success", result: { name: result.name, email: result.email, _id: result._id, user: result.user, role: "user" } })
 })
+
+
+
 
 
 exports.logOut = asyncHandler(async (req, res) => {
@@ -81,4 +85,48 @@ exports.logOut = asyncHandler(async (req, res) => {
     res.clearCookie("user")
     res.clearCookie("admin")
     res.status(200).json({ message: "Log Out success" })
+})
+
+
+
+
+
+// continueWithGoofle
+
+
+exports.continueWithGoogle = asyncHandler(async (req, res) => {
+    const { credential } = req.body
+
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+    const verify = await client.verifyIdToken({ idToken: credential })
+
+    if (!verify) {
+        return res.status(400).json({ message: "unable to verify" })
+    }
+
+    const { name, email, picture } = verify.payload
+    const result = await Auth.findOne({ email })
+    if (!result) {
+        if (!picture) {
+            const userData = await Auth.create({ name, email, user: "dummy.jpg", role: "user", active: true })
+            const token = jwt.sign({ id: userData._id }, process.env.JWT_KEY, { expiresIn: "7d" })
+            res.cookie("user", token, { maxAge: 1000 * 60 * 60 * 24 })
+            return res.status(200).json({ message: "Register success", result: { name, email, _id: userData._id, user: "dummy.jpg", role: "user" } })
+        }
+        const userData = await Auth.create({ name, email, user: picture, role: "user", active: true })
+        const token = jwt.sign({ id: userData._id }, process.env.JWT_KEY, { expiresIn: "7d" })
+        res.cookie("user", token, { maxAge: 1000 * 60 * 60 * 24 })
+        return res.status(200).json({ message: "Login success", result: { name, email, _id: userData._id, user: picture, role: "user" } })
+    } else {
+        const token = jwt.sign({ id: result._id }, process.env.JWT_KEY, { expiresIn: "7d" })
+        res.cookie("user", token, { maxAge: 1000 * 60 * 60 * 24, httpOnly: true })
+        res.json({
+            message: "login  success",
+            result: { name: result.name, email: result.email, _id: result._id, user: result.user, role: "user" }
+        })
+    }
+
+
+
+
 })
