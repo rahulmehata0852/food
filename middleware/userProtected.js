@@ -5,6 +5,7 @@ const Auth = require("../model/Auth")
 exports.userProtected = asyncHandler(async (req, res, next) => {
 
     const { user } = req.cookies
+    console.log(user);
     if (!user) {
         return res.status(401).json({ message: "cookie not found" })
     }
