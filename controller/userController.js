@@ -89,7 +89,7 @@ exports.placeOrderDish = asyncHandler(async (req, res) => {
 
     const x = await Order.create({ userId, cartId, address, status: "processing", isPaid: false, mode: "cod" })
     console.log(x);
-    return res.status(201).json({ message: "Place order successfully", id: x._id })
+    res.status(201).json({ message: "Place order successfully", id: x._id })
 
 })
 
@@ -147,15 +147,13 @@ exports.payMoney = asyncHandler(async (req, res) => {
     if (x === razorpay_signature) {
         if (orderId) {
             await Order.findByIdAndUpdate(orderId, { isPaid: true, mode: "pay" })
-            return res.status(201).json({ message: "Payment success" })
+            return res.status(200).json({ message: "Payment success" })
         } else {
             const x = await Order.create({ userId, cartId, address, status: "processing", order_id: razorpay_order_id, isPaid: true, mode: "pay" })
-            return res.status(201).json({ message: "order place success" })
+            return res.status(201).json({ message: "order place success", id: x._id })
         }
     } else {
         res.status(400).json({ message: "Unable to complete your payment. plz get in touch with bank" })
     }
-
-
 })
 
