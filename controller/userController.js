@@ -85,7 +85,7 @@ exports.getUserAddress = asyncHandler(async (req, res) => {
 // orders
 exports.placeOrderDish = asyncHandler(async (req, res) => {
     const { userId, cartId, address } = req.body
-    console.log(userId);
+    console.log(req.body);
 
     const x = await Order.create({ userId, cartId, address, status: "processing", isPaid: false, mode: "cod" })
     console.log(x);
