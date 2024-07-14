@@ -29,7 +29,7 @@ exports.registerUser = asyncHandler(async (req, res) => {
         const hashPass = await bcrypt.hash(password, 10)
         // createUser
         console.log("req.file", req.file);
-        const createUser = await Auth.create({ name, email, password: hashPass, user: "asassa", role: "user" })
+        const createUser = await Auth.create({ name, email, password: hashPass, user: req.file.filename || "asassa", role: "user" })
         const token = jwt.sign({ id: createUser._id }, process.env.JWT_KEY, { expiresIn: "7d" })
         res.cookie("user", token)
         res.status(201).json({ message: "Register Success", result: { name, email, _id: createUser._id, user: req.file.filename } })
