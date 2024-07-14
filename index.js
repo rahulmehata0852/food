@@ -15,17 +15,25 @@ app.use(express.static("users"))
 app.use(express.static("dishes"))
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors({
-    origin: "http://localhost:5173",
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        // Allow requests with no origin, like mobile apps or curl requests
+        if (!origin) return callback(null, true);
+        callback(null, true);
+    },
     credentials: true
-}))
+};
+
+app.use(cors(corsOptions));
+
 
 app.use("/api/auth", require("./routes/authRoute"))
 app.use("/api/admin", require("./routes/dishRoute"))
 app.use("/api/user", userProtected, require("./routes/userRoute"))
 
-
 app.use("*", (req, res) => {
+    console.log('Wildcard');
     res.sendFile(path.join(__dirname, "dist", "index.html"))
     // res.status(404).json({ message: "No resource found" })
 })

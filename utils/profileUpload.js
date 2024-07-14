@@ -13,9 +13,8 @@ const storage = multer.diskStorage({
         } else {
             cb({ message: "Email already exits" })
         }
-
     },
-    destination: (req, file, cb) => {
+     destination: (req, file, cb) => {
         cb(null, "users")
     },
 })
