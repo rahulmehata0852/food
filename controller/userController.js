@@ -53,8 +53,6 @@ exports.updateUserCart = asyncHandler(async (req, res) => {
         await Cart.findByIdAndDelete(result._id)
         return res.status(200).json({ message: "Dish close success" })
     }
-
-
     await Cart.findByIdAndUpdate(cartId, { dishes })
     res.status(200).json({ message: "cart Update success" })
 })
