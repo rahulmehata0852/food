@@ -65,7 +65,7 @@ exports.addUserAddress = asyncHandler(async (req, res) => {
     let result
     result = await Address.findOne({ pcode })
     if (result) {
-        return res.json({ message: "Address already existing" })
+        return res.json({ message: "Address already existing", id: result._id })
     } else {
         result = await Address.create({ fname, lname, email, mobile, address, city, pcode, lmark, userId })
         res.status(200).json({ message: "address add success", id: result._id })
