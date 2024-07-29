@@ -62,13 +62,14 @@ exports.updateUserCart = asyncHandler(async (req, res) => {
 exports.addUserAddress = asyncHandler(async (req, res) => {
     const { fname, lname, email, mobile, address, city, pcode, lmark, userId } = req.body
 
-    const result = await Address.findOne({ pcode })
+    let result
+    result = await Address.findOne({ pcode })
     if (result) {
         return res.json({ message: "Address already existing" })
+    } else {
+        result = await Address.create({ fname, lname, email, mobile, address, city, pcode, lmark, userId })
+        res.status(200).json({ message: "address add success", id: result._id })
     }
-
-    await Address.create({ fname, lname, email, mobile, address, city, pcode, lmark, userId })
-    res.status(200).json({ message: "address add success" })
 })
 
 
