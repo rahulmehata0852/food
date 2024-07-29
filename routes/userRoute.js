@@ -1,4 +1,4 @@
-const { getProduct, addCart, getUserCart, updateUserCart, addUserAddress, getUserAddress, placeOrderDish, getUserOrder, initiatePayment, payMoney, getUserOrderStatus } = require("../controller/userController")
+const { getProduct, addCart, getUserCart, updateUserCart, addUserAddress, getUserAddress, placeOrderDish, getUserOrder, initiatePayment, payMoney, getUserOrderStatus, getAddresUser } = require("../controller/userController")
 
 const router = require("express").Router()
 
@@ -12,6 +12,7 @@ router
     // address
     .post("/add-address", addUserAddress)
     .get("/address", getUserAddress)
+    .get("/user-address/:addressId", getAddresUser)
 
     // orders
 

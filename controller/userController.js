@@ -73,11 +73,22 @@ exports.addUserAddress = asyncHandler(async (req, res) => {
 })
 
 
+
+
 exports.getUserAddress = asyncHandler(async (req, res) => {
     const { userId } = req.body
-    const result = await Address.find({ userId })
+    const result = await Address.find({ userId });
     res.status(200).json({ message: "address fetch success", result })
-})
+});
+
+exports.getAddresUser = asyncHandler(async (req, res) => {
+    const { addressId } = req.params
+    const result = await Address.findById(addressId);
+    if (!result) {
+        return res.status(400).json({ message: "No Address found with this id" })
+    }
+    res.status(200).json({ message: "address fetch success", result })
+});
 
 
 
