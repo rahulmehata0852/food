@@ -105,19 +105,27 @@ exports.placeOrderDish = asyncHandler(async (req, res) => {
 
 
 exports.getUserOrder = asyncHandler(async (req, res) => {
-    const { userId } = req.body
-    const result = await Order.find({ userId }).populate("cartId")
+    const { userId } = req.body;
+    const result = await Order.find({ userId }).populate("cartId");
 
-    res.status(200).json({ message: "Order fetch success", result })
+    res.status(200).json({ message: "Order fetch success", result });
+})
+
+
+exports.getUserCarts = asyncHandler(async (req, res) => {
+    const { userId } = req.body;
+    const result = await Cart.find({ userId });
+
+    res.status(200).json({ message: "Carts fetch success", result });
 })
 
 exports.getUserOrderStatus = asyncHandler(async (req, res) => {
-    const { orderId } = req.params
-    const result = await Order.findById(orderId).populate("userId").populate("cartId")
+    const { orderId } = req.params;
+    const result = await Order.findById(orderId).populate("userId").populate("cartId");
     if (!result) {
-        return res.status(400).json({ message: "Unable to fetch order" })
+        return res.status(400).json({ message: "Unable to fetch order" });
     }
-    res.status(200).json({ message: "Order Status fetch success", result })
+    res.status(200).json({ message: "Order Status fetch success", result });
 })
 
 
