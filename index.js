@@ -33,6 +33,8 @@ app.use("/api/auth", require("./routes/authRoute"))
 app.use("/api/admin", require("./routes/dishRoute"))
 app.use("/api/user", userProtected, require("./routes/userRoute"))
 
+
+
 app.use("*", (req, res) => {
     console.log('Wildcard');
     res.sendFile(path.join(__dirname, "dist", "index.html"))
