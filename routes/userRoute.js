@@ -1,4 +1,4 @@
-const { getProduct, addCart, getUserCart, updateUserCart, addUserAddress, getUserAddress, placeOrderDish, getUserOrder, initiatePayment, payMoney, getUserOrderStatus, getAddresUser, getUserCarts } = require("../controller/userController")
+const { getProduct, addCart, getUserCart, updateUserCart, addUserAddress, getUserAddress, placeOrderDish, getUserOrder, initiatePayment, payMoney, getUserOrderStatus, getAddresUser, getUserCarts, deleteUserCart } = require("../controller/userController")
 
 const router = require("express").Router()
 
@@ -6,6 +6,7 @@ const router = require("express").Router()
 router
     .get("/dish/:productId", getProduct)
     .get("/carts", getUserCarts)
+    .delete("/cart-delete/:cartId", deleteUserCart)
     .post("/add-cart", addCart)
     .get("/cart/:cartId", getUserCart)
     .put("/update-cart/:cartId", updateUserCart)

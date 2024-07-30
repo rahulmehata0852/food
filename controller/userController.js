@@ -119,6 +119,13 @@ exports.getUserCarts = asyncHandler(async (req, res) => {
     res.status(200).json({ message: "Carts fetch success", result });
 })
 
+exports.deleteUserCart = asyncHandler(async (req, res) => {
+    const { userId } = req.body;
+    const { cartId } = req.params;
+    const result = await Cart.findByIdAndDelete(cartId);
+    res.status(200).json({ message: "Carts delete success", result });
+})
+
 exports.getUserOrderStatus = asyncHandler(async (req, res) => {
     const { orderId } = req.params;
     const result = await Order.findById(orderId).populate("userId").populate("cartId");
