@@ -98,9 +98,8 @@ exports.placeOrderDish = asyncHandler(async (req, res) => {
     console.log(req.body);
 
     const x = await Order.create({ userId, cartId, address, status: "processing", isPaid: false, mode: "cod" })
-    console.log(x);
+    await Cart.findByIdAndUpdate(cartId, { isComplete: false });
     res.status(201).json({ message: "Place order successfully", id: x._id })
-
 })
 
 
@@ -114,8 +113,7 @@ exports.getUserOrder = asyncHandler(async (req, res) => {
 
 exports.getUserCarts = asyncHandler(async (req, res) => {
     const { userId } = req.body;
-    const result = await Cart.find({ userId });
-
+    const result = await Cart.find({ userId, isComplete: false });
     res.status(200).json({ message: "Carts fetch success", result });
 })
 
@@ -143,7 +141,6 @@ exports.getUserOrderStatus = asyncHandler(async (req, res) => {
 
 
 exports.initiatePayment = asyncHandler(async (req, res) => {
-
     const { amount } = req.body
     const instance = new razorpay({
         key_id: process.env.RAZORPAY_API_KEY,
@@ -175,6 +172,7 @@ exports.payMoney = asyncHandler(async (req, res) => {
             return res.status(200).json({ message: "Payment success" })
         } else {
             const x = await Order.create({ userId, cartId, address, status: "processing", order_id: razorpay_order_id, isPaid: true, mode: "pay" })
+            await Cart.findByIdAndUpdate(cartId, { isComplete: false });
             return res.status(201).json({ message: "order place success", id: x._id })
         }
     } else {
