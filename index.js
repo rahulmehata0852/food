@@ -26,9 +26,7 @@ const corsOptions = {
     credentials: true
 };
 
-app.use(cors({
-    origin: "http://localhost:5173"
-}));
+app.use(cors(corsOptions));
 
 
 app.use("/api/auth", require("./routes/authRoute"))
