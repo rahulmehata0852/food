@@ -108,7 +108,7 @@ exports.getUserOrder = asyncHandler(async (req, res) => {
     const { userId } = req.body
     const result = await Order.find({ userId }).populate("cartId")
 
-    res.status(200).json({ message: "address fetch success", result })
+    res.status(200).json({ message: "Order fetch success", result })
 })
 
 exports.getUserOrderStatus = asyncHandler(async (req, res) => {
@@ -117,7 +117,7 @@ exports.getUserOrderStatus = asyncHandler(async (req, res) => {
     if (!result) {
         return res.status(400).json({ message: "Unable to fetch order" })
     }
-    res.status(200).json({ message: "address fetch success", result })
+    res.status(200).json({ message: "Order Status fetch success", result })
 })
 
 

@@ -19,13 +19,16 @@ app.use(cookieParser())
 const corsOptions = {
     origin: (origin, callback) => {
         // Allow requests with no origin, like mobile apps or curl requests
+
         if (!origin) return callback(null, true);
         callback(null, true);
     },
     credentials: true
 };
 
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: "http://localhost:5173"
+}));
 
 
 app.use("/api/auth", require("./routes/authRoute"))
